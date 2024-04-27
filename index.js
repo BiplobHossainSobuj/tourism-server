@@ -10,7 +10,7 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // const uri = "mongodb+srv://tourism-management:QDgVpIll2iZBmGNv@cluster0.bswbr7l.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bswbr7l.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -27,10 +27,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-
-    app.get('/users',(req,res)=>{
-        console.log('connect');
-        res.send('check connection with db');
+    const database = client.db('tourism-management-DB');
+    const touristSpotCollection = database.collection('tourists-spots');
+    // app.get('/users/:id',async(req,res)=>{
+    //     const id = req.params.id;
+    //     const query = {_id: new ObjectId(id)}
+    //     const result = await touristSpotCollection.insertOne(user);
+    //     res.send(result);
+    // })
+    app.get('/users',async(req,res)=>{
+        const cursor = touristSpotCollection.find();
+        const result = await cursor.toArray();
+        console.log(result);
+        res.send(result);
+    })
+    app.post('/users',async(req,res)=>{
+        const user = req.body;
+        const result = await touristSpotCollection.insertOne(user);
+        res.send(result);
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
