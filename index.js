@@ -61,6 +61,13 @@ async function run() {
       console.log(result);
       res.send(result);
     })
+    app.get('/update/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristSpotCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    })
 
     app.get('/allTouristSpot', async (req, res) => {
       const cursor = touristSpotCollection.find();
