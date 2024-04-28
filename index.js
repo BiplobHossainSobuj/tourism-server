@@ -35,13 +35,13 @@ async function run() {
     //     const result = await touristSpotCollection.insertOne(user);
     //     res.send(result);
     // })
-    app.get('/users',async(req,res)=>{
+    app.get('/all_tourists_spot',async(req,res)=>{
         const cursor = touristSpotCollection.find();
         const result = await cursor.toArray();
         console.log(result);
         res.send(result);
     })
-    app.post('/users',async(req,res)=>{
+    app.post('/all_tourists_spot',async(req,res)=>{
         const user = req.body;
         const result = await touristSpotCollection.insertOne(user);
         res.send(result);
