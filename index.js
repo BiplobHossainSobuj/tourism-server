@@ -29,23 +29,52 @@ async function run() {
     // await client.connect();
     const database = client.db('tourism-management-DB');
     const touristSpotCollection = database.collection('tourists-spots');
+    const userCollection = database.collection('users');
     // app.get('/users/:id',async(req,res)=>{
     //     const id = req.params.id;
     //     const query = {_id: new ObjectId(id)}
     //     const result = await touristSpotCollection.insertOne(user);
     //     res.send(result);
     // })
-    app.get('/all_tourists_spot',async(req,res)=>{
-        const cursor = touristSpotCollection.find();
-        const result = await cursor.toArray();
-        console.log(result);
-        res.send(result);
+
+    // app.get('/users',async(req,res)=>{
+    //   const cursor = userCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // })
+    // app.post('/users',async(req,res)=>{
+    //   const user = req.body;
+    //   const result = await userCollection.insertOne(user);
+    //   res.send(result);
+    // })
+    app.get('/allTouristSpot/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristSpotCollection.findOne(query);
+      console.log(result);
+      res.send(result);
     })
-    app.post('/all_tourists_spot',async(req,res)=>{
-        const user = req.body;
-        const result = await touristSpotCollection.insertOne(user);
-        res.send(result);
+    app.get('/mylist/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { user_email: email };
+      const result = await touristSpotCollection.find(query).toArray();
+      console.log(result);
+      res.send(result);
     })
+
+    app.get('/allTouristSpot', async (req, res) => {
+      const cursor = touristSpotCollection.find();
+      const result = await cursor.toArray();
+      console.log(result);
+      res.send(result);
+    })
+    app.post('/allTouristSpot', async (req, res) => {
+      const user = req.body;
+      const result = await touristSpotCollection.insertOne(user);
+      res.send(result);
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -57,10 +86,10 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/',(req,res)=>{
-    res.send('server is running for toursim management system is going to production');
+app.get('/', (req, res) => {
+  res.send('server is running for toursim management system is going to production');
 })
 
-app.listen(port,()=>{
-    console.log(`server is runnign on ${port}`);
+app.listen(port, () => {
+  console.log(`server is runnign on ${port}`);
 })
