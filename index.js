@@ -83,6 +83,28 @@ async function run() {
       console.log(result);
       res.send(result);
     })
+    app.put('/update/:id', async (req, res) => {
+      const id = req.params.id;
+      const doc = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const option = {upsert:true};
+      const updatedDoc = {
+        $set:{
+          tourists_spot_name:doc.tourists_spot_name,
+          country_Name:doc.country_Name,
+          spot_image:doc.spot_image,
+          location:doc.location,
+          description:doc.description,
+          average_cost:doc.average_cost,
+          seasonality:doc.seasonality,
+          travel_time:doc.travel_time,
+          totalVisitorsPerYear:doc.totalVisitorsPerYear
+        }
+      }
+      const result = await touristSpotCollection.updateOne(filter,updatedDoc,option);
+      console.log(result);
+      res.send(result);
+    })
 
     app.get('/allTouristSpot', async (req, res) => {
       const cursor = touristSpotCollection.find();
