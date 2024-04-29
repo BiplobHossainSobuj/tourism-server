@@ -29,6 +29,7 @@ async function run() {
     // await client.connect();
     const database = client.db('tourism-management-DB');
     const touristSpotCollection = database.collection('tourists-spots');
+    const contriesCollection = database.collection('countries');
     const userCollection = database.collection('users');
     // app.get('/users/:id',async(req,res)=>{
     //     const id = req.params.id;
@@ -42,6 +43,20 @@ async function run() {
     //   const result = await cursor.toArray();
     //   res.send(result);
     // })
+    app.get('/countries',async(req,res)=>{
+      const cursor = contriesCollection.find();
+      const result = await cursor.toArray();
+      console.log(result);
+      res.send(result);
+    })
+    app.get('/countries/:country_Name',async(req,res)=>{
+      const country_Name= req.params.country_Name;
+      const query = {country_Name:country_Name}
+      const cursor = touristSpotCollection.find(query);
+      const result = await cursor.toArray();
+      console.log(result);
+      res.send(result);
+    })
     // app.post('/users',async(req,res)=>{
     //   const user = req.body;
     //   const result = await userCollection.insertOne(user);
